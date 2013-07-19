@@ -50,8 +50,10 @@ class Link < ActiveRecord::Base
         @storage.length - 1
     end
     def get input
+        input = input.to_i
         return nil if input >= @storage.length
         @storage[input]
+        # binding.pry
     end
 end
 
@@ -64,7 +66,6 @@ newLink = Link.new()
 
 post '/new' do
     if @params['url'] then
-        # binding.pry
         # @ is the HTTP request obj
         input = @params['url']
         input_index = newLink.shortener input
@@ -78,6 +79,17 @@ end
 get '/jquery.js' do
     send_file 'jquery.js'
 end
+
+get '/favicon.ico' do
+    #
+end
+
+get '/:id' do
+    p 'getting ', @params['id'], ' -- ', newLink.get(@params['id'])
+    # binding.pry
+end
+
+
 
 ####################################################
 ####  Implement Routes to make the specs pass ######
