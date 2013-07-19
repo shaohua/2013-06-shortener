@@ -42,6 +42,13 @@ eos
 #
 # http://guides.rubyonrails.org/association_basics.html
 class Link < ActiveRecord::Base
+    attr_accessor :input_url, :output
+    def initialize input_url
+        @input_url = input_url
+    end
+    def shortener
+        @output = 1
+    end
 end
 
 get '/' do
@@ -49,6 +56,13 @@ get '/' do
 end
 
 post '/new' do
+    if @params['url'] then
+        # binding.pry
+        # p @params['url']
+        newLink = Link.new( @params['url'] )
+        # p newLink
+        p newLink.shortener
+    end
     # PUT CODE HERE TO CREATE NEW SHORTENED LINKS
 end
 
