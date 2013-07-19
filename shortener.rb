@@ -46,7 +46,7 @@ class Link < ActiveRecord::Base
         @storage = []
     end
     def shortener input_url
-        @storage << input_url
+        @storage << 'http://'+input_url
         @storage.length - 1
     end
     def get input
@@ -85,7 +85,7 @@ get '/favicon.ico' do
 end
 
 get '/:id' do
-    p 'getting ', @params['id'], ' -- ', newLink.get(@params['id'])
+    redirect newLink.get(@params['id'])
     # binding.pry
 end
 
