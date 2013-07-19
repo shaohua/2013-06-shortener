@@ -41,6 +41,10 @@ eos
 # associations here if need be
 #
 # http://guides.rubyonrails.org/association_basics.html
+class Urls < ActiveRecord::Base
+    attr_accessor :short, :long
+end
+
 class Link < ActiveRecord::Base
     def initialize
         @storage = {}
@@ -54,12 +58,14 @@ class Link < ActiveRecord::Base
         input = input.to_i
         return nil if input >= @storage.length
         @storage[input]
-        # binding.pry
     end
 end
 
 get '/' do
     form
+    newUrls = Urls.new({'short_url'=>'111','long_url'=>'http://www.google.com'})
+    newUrls.save
+    binding.pry
 end
 
 newLink = Link.new()
