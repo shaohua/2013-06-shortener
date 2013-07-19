@@ -43,11 +43,12 @@ eos
 # http://guides.rubyonrails.org/association_basics.html
 class Link < ActiveRecord::Base
     def initialize
-        @storage = []
+        @storage = {}
     end
     def shortener input_url
-        @storage << 'http://'+input_url
-        @storage.length - 1
+        key = @storage.length
+        value = 'http://' + input_url
+        @storage[key] = value unless @storage.has_value?(value)
     end
     def get input
         input = input.to_i
@@ -81,6 +82,7 @@ get '/jquery.js' do
 end
 
 get '/favicon.ico' do
+    #
     #
 end
 
