@@ -51,10 +51,11 @@ get '/' do
 end
 
 post '/new' do
-    if @params['url'] then
+    unless Urls.find_by_long_url(@params['url']) and @params['url'] then
         # @ is the HTTP request obj
         newUrls = Urls.new({'long_url' => @params['url']})
         newUrls.save
+        p 'http://localhost:4567/'+newUrls['id'].to_s
     end
 end
 
