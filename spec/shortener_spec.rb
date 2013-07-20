@@ -57,7 +57,7 @@ describe "URL Shortener" do
       short_link = last_response.body
 
       get '/' + short_link.split('/')[1]
-      last_response.should be_redirect 
+      last_response.should be_redirect
       follow_redirect!
       last_request.url.should == 'http://www.hackreactor.com/'
     end

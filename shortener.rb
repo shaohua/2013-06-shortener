@@ -51,11 +51,16 @@ get '/' do
 end
 
 post '/new' do
-    unless Urls.find_by_long_url(@params['url']) and @params['url'] then
+    find_url = Urls.find_by_long_url(@params['url'])
+    if find_url then
+        p 'http://localhost:4567/'+find_url.id.to_s
+    elsif @params['url'] then
         # @ is the HTTP request obj
         newUrls = Urls.new({'long_url' => @params['url']})
         newUrls.save
         p 'http://localhost:4567/'+newUrls['id'].to_s
+    else
+        halt 404, 'File Not Found.'
     end
 end
 
@@ -74,8 +79,17 @@ end
 
 get '/:id' do
     id_converted = @params['id'].to_i
-    return if id_converted == 0
-    redirect 'http://' + Urls.find(id_converted).long_url
+    begin
+        find_url = Urls.find(id_converted)
+        if find_url then
+            redirect 'http://' + Urls.find(id_converted).long_url
+            return
+        else
+            halt 404, 'File Not Found.'
+        end
+    rescue ActiveRecord::RecordNotFound
+        halt 404, 'File Not Found.'
+    end
 end
 
 
