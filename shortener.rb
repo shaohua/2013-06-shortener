@@ -13,12 +13,12 @@ end
 # Quick and dirty form for testing application
 #
 # If building a real application you should probably
-# use views: 
+# use views:
 # http://www.sinatrarb.com/intro#Views%20/%20Templates
 form = <<-eos
     <form id='myForm'>
         <input type='text' name="url">
-        <input type="submit" value="Shorten"> 
+        <input type="submit" value="Shorten">
     </form>
     <h2>Results:</h2>
     <h3 id="display"></h3>
@@ -36,51 +36,26 @@ form = <<-eos
     </script>
 eos
 
-# Models to Access the database 
-# through ActiveRecord.  Define 
+# Models to Access the database
+# through ActiveRecord.  Define
 # associations here if need be
 #
 # http://guides.rubyonrails.org/association_basics.html
-class Urls < ActiveRecord::Base
-    attr_accessor :short, :long
-end
 
-class Link < ActiveRecord::Base
-    def initialize
-        @storage = {}
-    end
-    def shortener input_url
-        key = @storage.length
-        value = 'http://' + input_url
-        @storage[key] = value unless @storage.has_value?(value)
-    end
-    def get input
-        input = input.to_i
-        return nil if input >= @storage.length
-        @storage[input]
-    end
+class Urls < ActiveRecord::Base
+    attr_accessible :long_url
 end
 
 get '/' do
     form
-    newUrls = Urls.new({'short_url'=>'111','long_url'=>'http://www.google.com'})
-    newUrls.save
-    binding.pry
 end
-
-newLink = Link.new()
-
 
 post '/new' do
     if @params['url'] then
         # @ is the HTTP request obj
-        input = @params['url']
-        input_index = newLink.shortener input
-        p 'input: ', input, input_index
-        output = newLink.get input_index
-        p 'output: ', output
+        newUrls = Urls.new({'long_url' => @params['url']})
+        newUrls.save
     end
-    # PUT CODE HERE TO CREATE NEW SHORTENED LINKS
 end
 
 get '/jquery.js' do
@@ -89,12 +64,10 @@ end
 
 get '/favicon.ico' do
     #
-    #
 end
 
 get '/:id' do
-    redirect newLink.get(@params['id'])
-    # binding.pry
+    redirect 'http://' + Urls.find(@params['id'].to_i).long_url
 end
 
 
