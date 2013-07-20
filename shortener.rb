@@ -66,8 +66,15 @@ get '/favicon.ico' do
     #
 end
 
+get '/jquery.min.map' do
+    #
+end
+
+
 get '/:id' do
-    redirect 'http://' + Urls.find(@params['id'].to_i).long_url
+    id_converted = @params['id'].to_i
+    return if id_converted == 0
+    redirect 'http://' + Urls.find(id_converted).long_url
 end
 
 
