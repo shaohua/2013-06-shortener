@@ -48,7 +48,7 @@ describe "URL Shortener" do
           5.times do
             post '/new', :url => @url
           end
-        }.to_not change{ Link.count }
+        }.to_not change{ Urls.count }
       end
     end
 
